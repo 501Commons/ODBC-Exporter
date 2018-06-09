@@ -17,7 +17,7 @@ def main():
     if len(sys.argv) == 5:
         Exporter_root = str(sys.argv[4])
     else:
-        Exporter_root = "C:\\repo\\Salesforce-Exporter-Private\\Clients\\" + sys.argv[2] + "\\Salesforce-Exporter"
+        Exporter_root = "C:\\repo\\ODBC-Exporter-Private\\Clients\\" + sys.argv[2] + "\\ODBC-Exporter"
 
     sys.stdout = open(join(Exporter_root, '..\\Exporter.log'), 'w')
     print('ODBC Exporter Startup')
@@ -109,6 +109,9 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
 
     return_status = ""
 
+    with open(join(query_path, "..\\odbc_connect.dat"), 'r') as odbcconnectfile:
+        odbc_connect=odbcconnectfile.read()
+
     for file_name in listdir(query_path):
         if not ".sql" in file_name:
             continue
@@ -120,12 +123,11 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
         print message
 
         # Read SQL Query
-        with open(file_name, 'r') as sqlqueryfile:
+        with open(join(query_path, file_name), 'r') as sqlqueryfile:
             sqlquery=sqlqueryfile.read()
 
         # Query ODBC and write to CSV
-        print os.environ['ODBC_CONNECT']
-        conn = pyodbc.connect(os.environ['ODBC_CONNECT'])
+        conn = pyodbc.connect(odbc_connect)
         crsr = conn.cursor()
 
         rows = crsr.execute(sqlquery)
@@ -154,6 +156,9 @@ def send_email(send_from, send_to, subject, text, file_path, server):
     from email.mime.text import MIMEText
     from email.utils import COMMASPACE, formatdate
 
+    print "Email subject: " + subject
+    print "Email text: " + text
+    
     msg = MIMEMultipart()
 
     msg['From'] = send_from
