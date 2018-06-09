@@ -110,7 +110,7 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
     return_status = ""
 
     with open(join(query_path, "..\\odbc_connect.dat"), 'r') as odbcconnectfile:
-        odbc_connect=odbcconnectfile.read()
+        odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
 
     for file_name in listdir(query_path):
         if not ".sql" in file_name:
@@ -124,14 +124,14 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
 
         # Read SQL Query
         with open(join(query_path, file_name), 'r') as sqlqueryfile:
-            sqlquery=sqlqueryfile.read()
+            sqlquery=sqlqueryfile.read().replace('\n', '').rstrip()
 
         # Query ODBC and write to CSV
         conn = pyodbc.connect(odbc_connect)
         crsr = conn.cursor()
-
         rows = crsr.execute(sqlquery)
-        with open(csv_name, 'w', newline='') as csvfile:
+
+        with open(csv_name, 'wb') as csvfile:
             writer = csv.writer(csvfile)
             writer.writerow([x[0] for x in crsr.description])  # column headers
             for row in rows:
