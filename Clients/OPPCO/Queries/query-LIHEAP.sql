@@ -1,0 +1,1 @@
+select * from LIHEAP where HEAT_SYS_REPAIR_REPLACE IS NOT NULL or CLIENT_LAST_NAME = 'Deshong' or CLIENT_LAST_NAME = 'Calvin' or CLIENT_LAST_NAME = 'Ragsdale' or CLIENT_LAST_NAME = 'Sorensen'
