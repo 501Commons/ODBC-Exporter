@@ -1,4 +1,4 @@
-"""Export Module for Salesforce"""
+"""Export Module for ODBC"""
 def main():
     """Main entry point"""
 
@@ -20,16 +20,16 @@ def main():
         Exporter_root = "C:\\repo\\Salesforce-Exporter-Private\\Clients\\" + sys.argv[2] + "\\Salesforce-Exporter"
 
     sys.stdout = open(join(Exporter_root, '..\\Exporter.log'), 'w')
-    print('Exporter Startup')
+    print('ODBC Exporter Startup')
 
     exporter_directory = join(Exporter_root, "Clients\\" + client_type)
-    print "Setting Exporter Directory: " + exporter_directory
+    print "Setting ODBC Exporter Directory: " + exporter_directory
 
     # Export Data
-    print "\n\nExporter - Export Data Process\n\n"
+    print "\n\nODBC Exporter - Export Data Process\n\n"
     process_data(exporter_directory, salesforce_type, client_type, client_emaillist)
 
-    print "Exporter process completed\n"
+    print "ODBC Exporter process completed\n"
 
 def process_data(exporter_directory, salesforce_type, client_type, client_emaillist):
     """Process Data based on data_mode"""
@@ -92,53 +92,54 @@ def contains_data(file_name):
     return False
 
 def export_dataloader(exporter_directory, client_type, salesforce_type):
-    """Export out of Salesforce using DataLoader"""
+    """Export out of ODBC using SQL Query files"""
 
+    import csv
+    import pyodbc
     import os
     from os import listdir
+    from os import makedirs
+    from os.path import exists
     from os.path import join
-    from subprocess import Popen, PIPE
 
-    bat_path = exporter_directory + "\\DataLoader"
+    query_path = exporter_directory + "\\Queries"
+    csv_path = exporter_directory + "\\Export\\"
+    if not exists(csv_path):
+        makedirs(csv_path)
 
-    return_code = ""
-    return_stdout = ""
-    return_stderr = ""
+    return_status = ""
 
-    for file_name in listdir(bat_path):
-        if not ".sdl" in file_name:
+    for file_name in listdir(query_path):
+        if not ".sql" in file_name:
             continue
 
-        # Check if associated csv has any data
         export_name = os.path.splitext(file_name)[0]
-        bat_file = (join(bat_path, "RunDataLoader.bat")
-                    + " " + salesforce_type + " "  + client_type + " " + export_name)
+        csv_name = join(csv_path, export_name + ".csv")
 
-        message = "Starting Export Process: " + bat_file
+        message = "Starting Export Process: " + file_name
         print message
-        return_stdout += message + "\n"
-        export_process = Popen(bat_file, stdout=PIPE, stderr=PIPE)
 
-        stdout, stderr = export_process.communicate()
+        # Read SQL Query
+        with open(file_name, 'r') as sqlqueryfile:
+            sqlquery=sqlqueryfile.read()
 
-        return_code += "\n\nexport_dataloader (returncode): " + str(export_process.returncode)
-        return_stdout += "\n\nexport_dataloader (stdout):\n" + stdout
-        return_stderr += "\n\nexport_dataloader (stderr):\n" + stderr
+        # Query ODBC and write to CSV
+        print os.environ['ODBC_CONNECT']
+        conn = pyodbc.connect(os.environ['ODBC_CONNECT'])
+        crsr = conn.cursor()
 
-        if (export_process.returncode != 0
-                or "Error" in return_stdout
-                or "We couldn't find the Java Runtime Environment (JRE)" in return_stdout):
-            raise Exception("Invalid Return Code", return_code + return_stdout + return_stderr)
+        rows = crsr.execute(sqlquery)
+        with open(csv_name, 'w', newline='') as csvfile:
+            writer = csv.writer(csvfile)
+            writer.writerow([x[0] for x in crsr.description])  # column headers
+            for row in rows:
+                writer.writerow(row)        
 
-        status_path = exporter_directory + "\\status"
+        if "error" in return_status or not contains_data(csv_name):
+            raise Exception("error export file empty: " + csv_name, (
+                "ODBC Export Error: " + return_status))
 
-        for file_name_status in listdir(status_path):
-            file_name_status_full = join(status_path, file_name_status)
-            if "error" in file_name_status_full and contains_data(file_name_status_full):
-                raise Exception("error file contains data: " + file_name_status_full, (
-                    return_code + return_stdout + return_stderr))
-
-    return return_code + return_stdout + return_stderr
+    return return_status
 
 def send_email(send_from, send_to, subject, text, file_path, server):
     """Send email via O365"""
