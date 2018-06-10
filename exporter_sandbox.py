@@ -124,7 +124,7 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
 
         # Read SQL Query
         with open(join(query_path, file_name), 'r') as sqlqueryfile:
-            sqlquery=sqlqueryfile.read().replace('\n', '').rstrip()
+            sqlquery=sqlqueryfile.read()
 
         # Query ODBC and write to CSV
         conn = pyodbc.connect(odbc_connect)

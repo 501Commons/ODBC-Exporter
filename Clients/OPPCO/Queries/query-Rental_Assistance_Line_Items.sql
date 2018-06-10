@@ -1,1 +1,5 @@
-select * from "Rental Assistance Line Items"
+select 
+    ApplicationNumber
+    ,Amount
+from
+    "Rental Assistance Line Items"
