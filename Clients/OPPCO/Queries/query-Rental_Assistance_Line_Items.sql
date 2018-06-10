@@ -1,5 +1,5 @@
 select 
-    ApplicationNumber
-    ,Amount
+    "ApplicationNumber"
+    ,"Amount"
 from
     "Rental Assistance Line Items"

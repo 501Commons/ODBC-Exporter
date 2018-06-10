@@ -124,7 +124,7 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
 
         # Read SQL Query
         with open(join(query_path, file_name), 'r') as sqlqueryfile:
-            sqlquery=sqlqueryfile.read()
+            sqlquery=sqlqueryfile.read().replace('\n', ' ')
 
         # Query ODBC and write to CSV
         conn = pyodbc.connect(odbc_connect)
@@ -135,7 +135,13 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
             writer = csv.writer(csvfile)
             writer.writerow([x[0] for x in crsr.description])  # column headers
             for row in rows:
-                writer.writerow(row)        
+                
+                # Check for double quote on names; name_last, name_first
+                if ("query-Household_Member_Data" in file_name or "query-Household_Member_Data" in file_name) and (u"\u201c" in row[0] or u"\u201c" in row[1]):
+                   row[0] = row[0].replace(u"\u201c", "(").replace(u"\u201d", ")")
+                   row[1] = row[1].replace(u"\u201c", "(").replace(u"\u201d", ")")
+
+                writer.writerow(row)
 
         if "error" in return_status or not contains_data(csv_name):
             raise Exception("error export file empty: " + csv_name, (
