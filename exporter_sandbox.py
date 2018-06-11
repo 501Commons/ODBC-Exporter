@@ -136,17 +136,19 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
             writer.writerow([x[0] for x in crsr.description])  # column headers
             for row in rows:
                 
-                if ("query-LIHEAP" in file_name and not row[36] is None):
-                    row[36] = row[36].replace("\r", "")
+                updated_row = list()
+                for column in row:
+                    if isinstance(column, basestring) and not column is None:
 
-                # Check for double quote on names; name_last, name_first
-                if (("query-Household_Member_Data" in file_name or "query-LIHEAP" in file_name) 
-                    and not row[0] is None and not row[1] is None 
-                    and (u"\u201c" in row[0] or u"\u201c" in row[1])):
-                   row[0] = row[0].replace(u"\u201c", "(").replace(u"\u201d", ")")
-                   row[1] = row[1].replace(u"\u201c", "(").replace(u"\u201d", ")")
+                        #Check for newline in string
+                        column = column.replace("\r", "")
 
-                writer.writerow(row)
+                        # Check for double quote on names; name_last, name_first
+                        column = column.replace(u"\u201c", "(").replace(u"\u201d", ")")
+
+                        updated_row.append(column)
+
+                writer.writerow(updated_row)
 
         if "error" in return_status or not contains_data(csv_name):
             raise Exception("error export file empty: " + csv_name, (
