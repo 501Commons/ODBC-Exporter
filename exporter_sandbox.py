@@ -146,7 +146,7 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
                         # Check for double quote on names; name_last, name_first
                         column = column.replace(u"\u201c", "(").replace(u"\u201d", ")")
 
-                        updated_row.append(column)
+                    updated_row.append(column)
 
                 writer.writerow(updated_row)
 
