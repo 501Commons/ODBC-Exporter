@@ -138,13 +138,18 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
                 
                 updated_row = list()
                 for column in row:
-                    if isinstance(column, basestring) and not column is None:
+                    if not column is None and isinstance(column, basestring):
 
-                        #Check for newline in string
+                        # Check for newline in string
                         column = column.replace("\r", "")
 
                         # Check for double quote on names; name_last, name_first
                         column = column.replace(u"\u201c", "(").replace(u"\u201d", ")")
+
+                    elif not column is None and isinstance(column, float):
+
+                        # Convert float to integer
+                        column = int(column)
 
                     updated_row.append(column)
 
