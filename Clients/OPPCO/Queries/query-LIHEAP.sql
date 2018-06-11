@@ -3,7 +3,7 @@ select
     ,"FILE_NUMBER", "_kp_hh_data_id"
     ,"RESIDENCE_STREET_ADDRESS", "RESIDENCE_CITY", "RESIDENCE_STATE", "RESIDENCE_ZIP_CODE"
     ,"MAILING_STREET_ADDRESS", "MAILING_CITY", "MAILING_STATE", "MAILING_ZIP_CODE"
-    ,"PHONE", "AreaCode", "AreaCodeMessage", "MessagePhone"
+    ,"PHONE", "AreaCode", "AreaCodeMessage", "MessagePhone", "ResidencyYears", "DateMovedIntoResidence"
     ,"DATECREATED", "CertificationDate", "PROGRAM", "HEAT_SYS_REPAIR_REPLACE", "ApplicationType"
     ,"ReceivedFoodStamps", "RoundedMonthlyNetIncome", "HHM_TotalNumberInHousehold"
     ,"CSBGOther", "MILITARY_INCOME", "VETERANS_BENEFITS", "CSBGGeneralAssistance", "SELF_EMPLOYED"
