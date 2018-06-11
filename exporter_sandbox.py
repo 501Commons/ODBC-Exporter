@@ -136,8 +136,13 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
             writer.writerow([x[0] for x in crsr.description])  # column headers
             for row in rows:
                 
+                if ("query-LIHEAP" in file_name and not row[36] is None):
+                    row[36] = row[36].replace("\r", "")
+
                 # Check for double quote on names; name_last, name_first
-                if ("query-Household_Member_Data" in file_name or "query-Household_Member_Data" in file_name) and (u"\u201c" in row[0] or u"\u201c" in row[1]):
+                if (("query-Household_Member_Data" in file_name or "query-LIHEAP" in file_name) 
+                    and not row[0] is None and not row[1] is None 
+                    and (u"\u201c" in row[0] or u"\u201c" in row[1])):
                    row[0] = row[0].replace(u"\u201c", "(").replace(u"\u201d", ")")
                    row[1] = row[1].replace(u"\u201c", "(").replace(u"\u201d", ")")
 
