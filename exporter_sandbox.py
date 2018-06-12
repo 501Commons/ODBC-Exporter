@@ -19,7 +19,10 @@ def main():
     else:
         Exporter_root = "C:\\repo\\ODBC-Exporter-Private\\Clients\\" + sys.argv[2] + "\\ODBC-Exporter"
 
+    # Setup Logging to File
+    sys_stdout_previous_state = sys.stdout
     sys.stdout = open(join(Exporter_root, '..\\Exporter.log'), 'w')
+
     print('ODBC Exporter Startup')
 
     exporter_directory = join(Exporter_root, "Clients\\" + client_type)
@@ -27,19 +30,19 @@ def main():
 
     # Export Data
     print "\n\nODBC Exporter - Export Data Process\n\n"
-    status_export = process_data(exporter_directory, salesforce_type, client_type, client_emaillist)
+    status_export = process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state)
 
     print "ODBC Exporter process completed\n"
 
     if "Error" in status_export:
         sys.exit()
 
-def process_data(exporter_directory, salesforce_type, client_type, client_emaillist):
+def process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state):
     """Process Data based on data_mode"""
 
+    import sys
     from os import makedirs
-    from os.path import exists
-    from os.path import join
+    from os.path import exists, join
 
     sendto = client_emaillist.split(";")
     user = 'db.powerbi@501commons.org'
@@ -69,11 +72,14 @@ def process_data(exporter_directory, salesforce_type, client_type, client_emaill
     else:
         body += "\n\nExport\n" + status_export
 
-        with open(join(exporter_directory, "..\\..\\..\\Exporter.log"), 'r') as logfile:
-            body += logfile.read()
-
     if not "Error" in subject:
         subject += " Successful"
+
+    # Restore stdout
+    sys.stdout = sys_stdout_previous_state
+
+    with open(join(exporter_directory, "..\\..\\..\\exporter.log"), 'r') as exportlog:
+        body += exportlog.read()
 
     # Send email results
     send_email(user, sendto, subject, body, file_path, smtpsrv)
