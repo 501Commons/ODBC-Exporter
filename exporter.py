@@ -40,7 +40,7 @@ def process_data(exporter_directory, salesforce_type, client_type, client_emaill
     sendto = client_emaillist.split(";")
     user = 'db.powerbi@501commons.org'
     smtpsrv = "smtp.office365.com"
-    subject = "Export Data Results -"
+    subject = "Export ODBC Data Results -"
     file_path = exporter_directory + "\\Status"
     if not exists(file_path):
         makedirs(file_path)
