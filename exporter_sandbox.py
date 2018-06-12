@@ -27,9 +27,12 @@ def main():
 
     # Export Data
     print "\n\nODBC Exporter - Export Data Process\n\n"
-    process_data(exporter_directory, salesforce_type, client_type, client_emaillist)
+    status_export = process_data(exporter_directory, salesforce_type, client_type, client_emaillist)
 
     print "ODBC Exporter process completed\n"
+
+    if "Error" in status_export:
+        sys.exit()
 
 def process_data(exporter_directory, salesforce_type, client_type, client_emaillist):
     """Process Data based on data_mode"""
