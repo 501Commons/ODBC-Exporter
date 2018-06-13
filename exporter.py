@@ -110,7 +110,7 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
     return_status = ""
 
     for file_name in listdir(query_path):
-        if not ".sql" in file_name:
+        if not (salesforce_type + ".sql") in file_name:
             continue
 
         export_name = os.path.splitext(file_name)[0]
