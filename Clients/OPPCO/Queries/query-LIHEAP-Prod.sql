@@ -9,7 +9,4 @@ select
     ,"CSBGOther", "MILITARY_INCOME", "VETERANS_BENEFITS", "CSBGGeneralAssistance", "SELF_EMPLOYED"
     ,"EARNED_INCOME", "CHILD_SUPPORT_INCOME", "HousingStatusSelection", "CSBGFamilyType"
     ,"CSBGTANF", "CSBGSSI", "CSBGSocialSecurity", "CSBGPension", "CSBGIncomeSourceTypes", "CSBGUnemploymentIns"
-
 from LIHEAP
-where
-    "HEAT_SYS_REPAIR_REPLACE" IS NOT NULL or "CLIENT_LAST_NAME" = 'Deshong' or "CLIENT_LAST_NAME" = 'Calvin' or "CLIENT_LAST_NAME" = 'Ragsdale' or "CLIENT_LAST_NAME" = 'Sorensen'
