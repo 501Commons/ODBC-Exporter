@@ -156,8 +156,9 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
                         # Check for newline in string
                         column = column.replace("\r", "")
 
-                        # Check for double quote on names; name_last, name_first
+                        # Check to unify delimiters within columns for additional info (e.g., nickname, preferred name)
                         column = column.replace(u"\u201c", "(").replace(u"\u201d", ")")
+                        column = column.replace(u"\u2018", "(").replace(u"\u2019", ")")
 
                     elif not column is None and isinstance(column, float):
 
