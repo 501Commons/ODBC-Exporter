@@ -15,7 +15,7 @@
             "env": {},
             "envFile": "${workspaceFolder}/.env",
             "args": [
-                "Sandbox"
+                "Prod"
                 ,"OPPCO"
                 ,"db.oppco@501commons.org"
             ],
