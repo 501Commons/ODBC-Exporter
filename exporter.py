@@ -23,6 +23,10 @@ def main():
     if '-emailattachments' in sys.argv:
         emailattachments = True
 
+    emailonsuccess = False
+    if '-emailonsuccess' in sys.argv:
+        emailonsuccess = True
+
     # Setup Logging to File
     sys_stdout_previous_state = sys.stdout
     sys.stdout = open(join(Exporter_root, '..\\Exporter.log'), 'w')
@@ -34,14 +38,14 @@ def main():
 
     # Export Data
     print "\n\nODBC Exporter - Export Data Process\n\n"
-    status_export = process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state, emailattachments)
+    status_export = process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state, emailattachments, emailonsuccess)
 
     print "ODBC Exporter process completed\n"
 
     if "Error" in status_export:
         sys.exit()
 
-def process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state, emailattachments):
+def process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state, emailattachments, emailonsuccess):
     """Process Data based on data_mode"""
 
     import sys
@@ -78,6 +82,9 @@ def process_data(exporter_directory, salesforce_type, client_type, client_emaill
 
     if not "Error" in subject:
         subject += " Successful"
+
+        if not emailonsuccess:
+            return status_export
 
     # Restore stdout
     sys.stdout = sys_stdout_previous_state
@@ -220,7 +227,7 @@ def send_email(send_from, send_to, subject, text, file_path, server, emailattach
 
     msgbody = subject + "\n\n"
     if not emailattachments:
-        msgbody += "Attachments disabled for import results.  Result files can be accessed on the import server.\n\n"
+        msgbody += "Attachments disabled: Result files can be accessed on the import server.\n\n"
 
     onlyfiles = [join(file_path, f) for f in listdir(file_path)
                  if isfile(join(file_path, f))]
@@ -237,9 +244,9 @@ def send_email(send_from, send_to, subject, text, file_path, server, emailattach
                         Name=basename(file_name)
                         )
 
-            # After the file is closed
-            part['Content-Disposition'] = 'attachment; filename="%s"' % basename(file_name)
-            msg.attach(part)
+                # After the file is closed
+                part['Content-Disposition'] = 'attachment; filename="%s"' % basename(file_name)
+                msg.attach(part)
 
     msg.attach(MIMEText(msgbody))
 
