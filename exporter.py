@@ -222,7 +222,7 @@ def send_email(send_from, send_to, subject, text, file_path, server, emailattach
     from os.path import isfile, join
 
     #Create log file for system results
-    with open(join(file_path, "importlog.txt"), "w") as text_file:
+    with open(join(file_path, "ODBC-Exporter-Log.txt"), "w") as text_file:
         text_file.write(text)
 
     msgbody = subject + "\n\n"
