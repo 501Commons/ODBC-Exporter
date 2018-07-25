@@ -80,6 +80,9 @@ def process_data(exporter_directory, salesforce_type, client_type, client_emaill
     else:
         output_log += "\n\nExport\n" + status_export
 
+    # Restore stdout
+    sys.stdout = sys_stdout_previous_state
+
     with open(join(exporter_directory, "..\\..\\..\\exporter.log"), 'r') as exportlog:
         output_log += exportlog.read()
 
@@ -89,14 +92,14 @@ def process_data(exporter_directory, salesforce_type, client_type, client_emaill
               "w") as text_file:
         text_file.write(output_log)
 
+    #Write log to stdout
+    print output_log
+
     if not "Error" in subject:
         subject += " Successful"
 
         if not emailonsuccess:
             return status_export
-
-    # Restore stdout
-    sys.stdout = sys_stdout_previous_state
 
     # Send email results
     send_email(user, sendto, subject, file_path, smtpsrv, emailattachments)
