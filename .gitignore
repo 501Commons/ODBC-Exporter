@@ -2,12 +2,12 @@
 .settings
 .sfdx/
 settings.json
-Import/
+Export/
 Incoming/
 status/
 *.properties
 key.txt
-importer.bat
+Exporter.bat
 *.csv
 ~*
-apex.db
+.sfdx/tools/apex.db
