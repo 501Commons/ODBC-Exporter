@@ -29,7 +29,7 @@ def main():
 
     # Setup Logging to File
     sys_stdout_previous_state = sys.stdout
-    sys.stdout = open(join(Exporter_root, '..\\Exporter.log'), 'w')
+    sys.stdout = open(join(Exporter_root, '..\\exporter.log'), 'w')
 
     print('ODBC Exporter Startup')
 
