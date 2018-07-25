@@ -239,7 +239,7 @@ def send_email(send_from, send_to, subject, file_path, server, emailattachments)
 
             msgbody += "\t{}, with {} rows\n".format(file_name, file_linecount(file_name))
 
-            if emailattachments:
+            if emailattachments or ("error" in subject.lower() and "log" in file_name):
                 with open(file_name, "rb") as file_name_open:
                     part = MIMEApplication(
                         file_name_open.read(),
