@@ -75,7 +75,7 @@ def process_data(exporter_directory, salesforce_type, client_type, client_emaill
         else:
             status_export = "Error detected so skipped"
     except Exception as ex:
-        subject += " Error Export"
+        subject += " Error ODBC Export"
         output_log += "\n\nUnexpected export error:" + str(ex)
     else:
         output_log += "\n\nExport\n" + status_export
