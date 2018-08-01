@@ -27,9 +27,14 @@ def main():
     if '-emailonsuccess' in sys.argv:
         emailonsuccess = True
 
+    interactivemode = False
+    if '-interactivemode' in sys.argv:
+        interactivemode = True
+
     # Setup Logging to File
     sys_stdout_previous_state = sys.stdout
-    sys.stdout = open(join(Exporter_root, '..\\exporter.log'), 'w')
+    if not interactivemode:
+        sys.stdout = open(join(Exporter_root, '..\\exporter.log'), 'w')
 
     print('ODBC Exporter Startup')
 
