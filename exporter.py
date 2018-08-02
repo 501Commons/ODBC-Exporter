@@ -11,13 +11,12 @@ def main():
 
     if len(sys.argv) < 4:
         print ("Calling error - missing inputs.  Expecting " +
-               "salesforce_type client_type client_emaillist [Exporter_root]\n")
+               "salesforce_type client_type client_emaillist\n")
         return
 
-    if len(sys.argv) == 5:
-        Exporter_root = str(sys.argv[4])
-    else:
-        Exporter_root = "C:\\repo\\ODBC-Exporter-Private\\Clients\\" + sys.argv[2] + "\\ODBC-Exporter"
+    exporter_root = "C:\\repo\\ODBC-Exporter-Private\\Clients\\{}\\ODBC-Exporter".format(client_type)
+    if '-rootdir' in sys.argv:
+        exporter_root = sys.argv[sys.argv.index('-rootdir') + 1]
 
     emailattachments = False
     if '-emailattachments' in sys.argv:
@@ -34,11 +33,11 @@ def main():
     # Setup Logging to File
     sys_stdout_previous_state = sys.stdout
     if not interactivemode:
-        sys.stdout = open(join(Exporter_root, '..\\exporter.log'), 'w')
+        sys.stdout = open(join(exporter_root, '..\\exporter.log'), 'w')
 
     print('ODBC Exporter Startup')
 
-    exporter_directory = join(Exporter_root, "Clients\\" + client_type)
+    exporter_directory = join(exporter_root, "Clients\\" + client_type)
     print "Setting ODBC Exporter Directory: " + exporter_directory
 
     # Export Data
