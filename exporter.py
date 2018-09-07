@@ -165,7 +165,7 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
         if "ChildPlus" in file_name:
             connectionType = 'ChildPlus'
 
-        with open(join(query_path, "..\\odbc_connect" + connectionType + ".dat"), 'r') as odbcconnectfile:
+        with open(join(query_path, "..\\odbc_connect_" + connectionType + ".dat"), 'r') as odbcconnectfile:
             odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
 
         # Query ODBC and write to CSV
