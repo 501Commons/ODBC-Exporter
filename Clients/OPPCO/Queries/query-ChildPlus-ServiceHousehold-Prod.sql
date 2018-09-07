@@ -1,5 +1,6 @@
 SELECT TOP 100
-	   ProgramTerm.ProgramTermName
+	   ProgramParticipation.ProgramParticipationID
+	   , ProgramTerm.ProgramTermName
 	   , ProgramTerm.BeginDate
 	   , ProgramTerm.EndDate
 	   , vCurrentStatusLoc.StatusDescription
