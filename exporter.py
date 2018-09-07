@@ -146,9 +146,6 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
 
     return_status = ""
 
-    with open(join(query_path, "..\\odbc_connect.dat"), 'r') as odbcconnectfile:
-        odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
-
     for file_name in listdir(query_path):
         if not (salesforce_type + ".sql") in file_name:
             continue
@@ -162,6 +159,14 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
         # Read SQL Query
         with open(join(query_path, file_name), 'r') as sqlqueryfile:
             sqlquery=sqlqueryfile.read().replace('\n', ' ')
+
+        # Get ODBC Connection
+        connectionType = 'LIHEAP'
+        if "ChildPlus" in file_name:
+            connectionType = 'ChildPlus'
+
+        with open(join(query_path, "..\\odbc_connect" + connectionType + ".dat"), 'r') as odbcconnectfile:
+            odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
 
         # Query ODBC and write to CSV
         conn = pyodbc.connect(odbc_connect)
