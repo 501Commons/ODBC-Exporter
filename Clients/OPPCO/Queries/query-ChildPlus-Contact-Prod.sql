@@ -9,6 +9,7 @@ SELECT TOP 100
 	, Person.PreferredName
 	, Person.PreviousName
     , Person.Birthday
+	, vFamily.PrimaryAdult
 	, vPerson.Age
 	, vPerson.GenderDescription
 	, vPerson.RaceDescription
@@ -42,6 +43,8 @@ INNER JOIN Person
 	   ON Person.PersonID = vPerson.PersonID
 INNER JOIN FamilyMembership
        ON FamilyMembership.PersonID = vPerson.PersonID
+INNER JOIN vFamily
+       ON FamilyMembership.FamilyID = vFamily.FamilyID
 INNER JOIN FamilyMember
 	ON FamilyMember.PersonID = Vperson.PersonID
 LEFT JOIN Code CodeEducation
@@ -54,4 +57,4 @@ LEFT JOIN vPersonPhone as PrimaryPhone
 LEFT JOIN vPersonPhone as SecondaryPhone
 	ON SecondaryPhone.PersonID = vPerson.PersonID AND
 		SecondaryPhone.PhoneRank = 2
-WHERE FamilyMembership.FamilyID = '73a0ac56-6a33-480a-ae93-5bf444d18ef2'		
+WHERE FamilyMembership.FamilyID = '73a0ac56-6a33-480a-ae93-5bf444d18ef2'

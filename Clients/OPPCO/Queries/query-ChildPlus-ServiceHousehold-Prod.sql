@@ -28,6 +28,8 @@ SELECT TOP 100
 			WHEN ProgramParticipation.SNAP = 0 THEN 'No'
 			WHEN ProgramParticipation.SNAP >= 2 THEN 'Unknown/Not reported'
    	   END AS SNAP    
+	   , ProgramParticipation.MedicaidNumber
+	   , ProgramParticipation.MedicaidEligibilityCodeID
 	   , vFamily.ParentTypeDescription
 	   ,CASE
 			WHEN ParentTypeCodeID = 'A49CC970-9B38-4DA5-A4F3-2E000C9CD8D8' AND
