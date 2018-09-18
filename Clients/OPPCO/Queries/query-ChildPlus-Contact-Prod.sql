@@ -9,7 +9,6 @@ SELECT TOP 100
 	, Person.PreferredName
 	, Person.PreviousName
     , Person.Birthday
-	, vFamily.PrimaryAdult
 	, vPerson.Age
 	, vPerson.GenderDescription
 	, vPerson.RaceDescription
@@ -38,6 +37,7 @@ SELECT TOP 100
 			OR DC.ClosedDate > GETDATE())) as Disabled
 	, CodeEducation.Description as Education
 	, CodeEmployment.Description as Employment
+	, vFamily.PrimaryAdult
 FROM Vperson
 INNER JOIN Person
 	   ON Person.PersonID = vPerson.PersonID
