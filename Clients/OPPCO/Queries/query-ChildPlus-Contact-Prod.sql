@@ -38,6 +38,13 @@ SELECT TOP 100
 	, CodeEducation.Description as Education
 	, CodeEmployment.Description as Employment
 	, vFamily.PrimaryAdult
+	,vProgramParticipation.MedicaidEligibilityDescription
+	,vIEP.PrimaryDisability
+	,CASE
+		WHEN vIEP.PrimaryDisability = 'Non-categorical/developmental delay' THEN 'Yes'
+		ELSE 'No'
+	 END AS DevelopmentalDelay
+	,(SELECT PersonName from vPerson Temp where Temp.PersonID = Vperson.PersonCaseworker) as PersonCaseWorker
 FROM Vperson
 INNER JOIN Person
 	   ON Person.PersonID = vPerson.PersonID
@@ -47,6 +54,10 @@ INNER JOIN vFamily
        ON FamilyMembership.FamilyID = vFamily.FamilyID
 INNER JOIN FamilyMember
 	ON FamilyMember.PersonID = Vperson.PersonID
+LEFT JOIN vIEP
+	ON vIEP.PersonID = vPerson.PersonID
+LEFT JOIN vProgramParticipation
+	ON vPerson.PersonID = vProgramParticipation.PersonID
 LEFT JOIN Code CodeEducation
 	ON CodeEducation.CodeID = FamilyMember.EducationLevelCodeID
 LEFT JOIN Code CodeEmployment
@@ -57,4 +68,3 @@ LEFT JOIN vPersonPhone as PrimaryPhone
 LEFT JOIN vPersonPhone as SecondaryPhone
 	ON SecondaryPhone.PersonID = vPerson.PersonID AND
 		SecondaryPhone.PhoneRank = 2
-WHERE FamilyMembership.FamilyID = '73a0ac56-6a33-480a-ae93-5bf444d18ef2'
