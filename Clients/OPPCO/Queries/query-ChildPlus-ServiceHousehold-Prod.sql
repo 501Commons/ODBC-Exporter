@@ -1,4 +1,4 @@
-SELECT TOP 100
+SELECT
 	   ProgramParticipation.ProgramParticipationID
 	   , ProgramTerm.ProgramTermName
 	   , ProgramTerm.BeginDate

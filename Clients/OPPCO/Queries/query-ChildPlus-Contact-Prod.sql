@@ -1,4 +1,4 @@
-SELECT TOP 100
+SELECT
     Person.ChildPlusID
     , Person.PersonID
 	, FamilyMembership.FamilyID
