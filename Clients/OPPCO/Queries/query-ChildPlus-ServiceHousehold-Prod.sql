@@ -9,7 +9,8 @@ SELECT
 	   , vCurrentStatusLoc.EndDate
 	   , vCurrentStatusLoc.EntryDate
 	   , Family.FamilyID
-	   , vFamily.FamilyName
+       , CONVERT(varchar(128), vFamily.FamilyName)
+			COLLATE Cyrillic_General_CI_AI as FamilyName
 	   , vFamily.NumberInFamily
 	   , vFamily.NumberInHousehold
 	   , Family.MailAddress1, Family.MailCity, Family.MailState, Family.MailZip, Family.MailingAddressStartDate
@@ -113,4 +114,3 @@ LEFT JOIN vFamilyPhone as SecondaryPhone
 		SecondaryPhone.PhoneRank = 2
 WHERE YEAR(ProgramTerm.BeginDate) >= 2017 
 ORDER BY vFamily.FamilyID DESC
-	

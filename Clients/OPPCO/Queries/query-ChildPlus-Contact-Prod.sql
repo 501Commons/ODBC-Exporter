@@ -2,12 +2,18 @@ SELECT
     Person.ChildPlusID
     , Person.PersonID
 	, FamilyMembership.FamilyID
-	, Person.FirstName
-	, Person.MiddleName
-	, Person.LastName
-	, Person.NameSuffix
-	, Person.PreferredName
-	, Person.PreviousName
+	, CONVERT(varchar(128), Person.FirstName)
+		COLLATE Cyrillic_General_CI_AI as FirstName
+	, CONVERT(varchar(128), Person.MiddleName)
+		COLLATE Cyrillic_General_CI_AI as MiddleName
+	, CONVERT(varchar(128), Person.LastName)
+		COLLATE Cyrillic_General_CI_AI as LastName
+	, CONVERT(varchar(128), Person.NameSuffix)
+		COLLATE Cyrillic_General_CI_AI as NameSuffix
+	, CONVERT(varchar(128), Person.PreferredName)
+		COLLATE Cyrillic_General_CI_AI as PreferredName
+	, CONVERT(varchar(128), Person.PreviousName)
+		COLLATE Cyrillic_General_CI_AI as PreviousName
     , Person.Birthday
 	, vPerson.Age
 	, vPerson.GenderDescription
@@ -20,7 +26,8 @@ SELECT
 		WHEN vPerson.IsHispanic = 0 THEN 'No'
 		WHEN vPerson.IsHispanic >= 2 THEN 'Unknown/Not reported'
  	END AS EthnicityHispanicLatino    
-	, Person.Email1
+	, CONVERT(varchar(128), Person.Email1)
+		COLLATE Cyrillic_General_CI_AI as Email1
 	, RIGHT(vPerson.SSN, 4) as SSNShort
     , Person.MailAddress1, Person.MailAddress2, Person.MailCity, Person.MailState, Person.MailZip
     , Person.PhysicalAddress1, Person.PhysicalAddress2, Person.PhysicalCity, Person.PhysicalState, Person.PhysicalZip
@@ -44,7 +51,8 @@ SELECT
 		WHEN vIEP.PrimaryDisability = 'Non-categorical/developmental delay' THEN 'Yes'
 		ELSE 'No'
 	 END AS DevelopmentalDelay
-	,(SELECT PersonName from vPerson Temp where Temp.PersonID = Vperson.PersonCaseworker) as PersonCaseWorker
+	,(SELECT CONVERT(varchar(128), PersonName)
+		COLLATE Cyrillic_General_CI_AI from vPerson Temp where Temp.PersonID = Vperson.PersonCaseworker) as PersonCaseWorker
 FROM Vperson
 INNER JOIN Person
 	   ON Person.PersonID = vPerson.PersonID
@@ -68,4 +76,5 @@ LEFT JOIN vPersonPhone as PrimaryPhone
 LEFT JOIN vPersonPhone as SecondaryPhone
 	ON SecondaryPhone.PersonID = vPerson.PersonID AND
 		SecondaryPhone.PhoneRank = 2
+		WHERE Person.ChildPlusID <= 17482
 ORDER BY Person.ChildPlusID DESC
