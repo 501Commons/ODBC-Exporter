@@ -68,3 +68,4 @@ LEFT JOIN vPersonPhone as PrimaryPhone
 LEFT JOIN vPersonPhone as SecondaryPhone
 	ON SecondaryPhone.PersonID = vPerson.PersonID AND
 		SecondaryPhone.PhoneRank = 2
+ORDER BY Person.ChildPlusID DESC

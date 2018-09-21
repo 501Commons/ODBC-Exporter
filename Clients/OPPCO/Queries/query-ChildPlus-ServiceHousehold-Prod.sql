@@ -112,3 +112,5 @@ LEFT JOIN vFamilyPhone as SecondaryPhone
 	ON SecondaryPhone.FamilyID = vFamily.FamilyID AND
 		SecondaryPhone.PhoneRank = 2
 WHERE YEAR(ProgramTerm.BeginDate) >= 2017 
+ORDER BY vFamily.FamilyID DESC
+	
