@@ -45,7 +45,6 @@ SELECT
 	, CodeEducation.Description as Education
 	, CodeEmployment.Description as Employment
 	, vFamily.PrimaryAdult
-	,vProgramParticipation.MedicaidEligibilityDescription
 	,vIEP.PrimaryDisability
 	,CASE
 		WHEN vIEP.PrimaryDisability = 'Non-categorical/developmental delay' THEN 'Yes'
@@ -64,8 +63,6 @@ INNER JOIN FamilyMember
 	ON FamilyMember.PersonID = Vperson.PersonID
 LEFT JOIN vIEP
 	ON vIEP.PersonID = vPerson.PersonID
-LEFT JOIN vProgramParticipation
-	ON vPerson.PersonID = vProgramParticipation.PersonID
 LEFT JOIN Code CodeEducation
 	ON CodeEducation.CodeID = FamilyMember.EducationLevelCodeID
 LEFT JOIN Code CodeEmployment
@@ -76,5 +73,6 @@ LEFT JOIN vPersonPhone as PrimaryPhone
 LEFT JOIN vPersonPhone as SecondaryPhone
 	ON SecondaryPhone.PersonID = vPerson.PersonID AND
 		SecondaryPhone.PhoneRank = 2
-		WHERE Person.ChildPlusID <= 17482
+--		Uncomment Unit Test to verify joins should return 4 family members
+--		WHERE vFamily.FamilyID = '73A0AC56-6A33-480A-AE93-5BF444D18EF2'
 ORDER BY Person.ChildPlusID DESC

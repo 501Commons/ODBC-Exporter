@@ -92,7 +92,11 @@ SELECT
 		END AS EmploymentOnlyCalculated
 	    ,ProgramParticipation.EligibilityIncome
 		,Family.MonthlyFamilyIncome
-	   
+		,ProgramParticipation.MedicaidEligibilityCodeID
+		,CASE 
+			WHEN (ProgramParticipation.MedicaidEligibilityCodeID = 'a84b2349-5166-49df-a4d8-fc7a981da6ea') then 'Yes'
+			ELSE 'No'
+		 END AS MedicaidEligibility
 FROM vFamily
 INNER JOIN Family
 	ON Family.FamilyID = vFamily.FamilyID
@@ -112,5 +116,7 @@ LEFT JOIN vFamilyPhone as PrimaryPhone
 LEFT JOIN vFamilyPhone as SecondaryPhone
 	ON SecondaryPhone.FamilyID = vFamily.FamilyID AND
 		SecondaryPhone.PhoneRank = 2
-WHERE YEAR(ProgramTerm.BeginDate) >= 2017 
+WHERE YEAR(ProgramTerm.BeginDate) >= 2017
+--	Uncomment Unit Test to verify joins should return 3 Services for Family
+--	AND vFamily.FamilyID = '73A0AC56-6A33-480A-AE93-5BF444D18EF2'
 ORDER BY vFamily.FamilyID DESC
