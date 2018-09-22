@@ -169,6 +169,9 @@ def export_dataloader(exporter_directory, client_type, client_subtype, salesforc
                 connectionType = 'ChildPlus'
             else:
                 continue
+        else:
+            if "ChildPlus" in file_name:
+                continue
 
         with open(join(query_path, "..\\odbc_connect_" + connectionType + ".dat"), 'r') as odbcconnectfile:
             odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
