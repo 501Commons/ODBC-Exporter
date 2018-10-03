@@ -8,7 +8,3 @@ select
     "Client_MH_Disability", "Client_MH_Services"
 from
     Household
-INNER JOIN Waitlist
-       ON Household.key_foreign_waitlist_id = Waitlist.key_primary_waitlist_id
-where
-    Waitlist.intake_date >= '12/01/2017'
