@@ -1,5 +1,5 @@
 select
-    "timestamp_created"
+    Household.timestamp_created
     ,"key_foreign_waitlist_id"
     ,"Client_Name_First"
     ,"Client_Name_Last"
