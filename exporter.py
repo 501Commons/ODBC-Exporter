@@ -141,6 +141,7 @@ def export_dataloader(exporter_directory, client_type, client_subtype, salesforc
     from os.path import exists
     from os.path import join
 
+    connectionType = client_subtype
     query_path = exporter_directory + "\\Queries"
     csv_path = exporter_directory + "\\Export\\"
     if not exists(csv_path):
@@ -163,15 +164,8 @@ def export_dataloader(exporter_directory, client_type, client_subtype, salesforc
             sqlquery=sqlqueryfile.read().replace('\n', ' ')
 
         # Get ODBC Connection
-        connectionType = 'LIHEAP'
-        if "ChildPlus" in client_subtype:
-            if "ChildPlus" in file_name:
-                connectionType = 'ChildPlus'
-            else:
-                continue
-        else:
-            if "ChildPlus" in file_name:
-                continue
+        if not client_subtype in file_name:
+            continue
 
         with open(join(query_path, "..\\odbc_connect_" + connectionType + ".dat"), 'r') as odbcconnectfile:
             odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
