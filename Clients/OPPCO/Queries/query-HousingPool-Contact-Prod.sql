@@ -7,4 +7,4 @@ select
     "Client_Veteran", "Client_Disabled", "Client_Age",
     "Client_MH_Disability", "Client_MH_Services"
 from
-    LIHEAP
+    "Housing Pool"."Household"
