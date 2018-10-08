@@ -200,9 +200,9 @@ def export_dataloader(exporter_directory, client_type, client_subtype, salesforc
 
                 writer.writerow(updated_row)
 
-        if "error" in return_status or not contains_data(csv_name):
-            raise Exception("error export file empty: " + csv_name, (
-                "ODBC Export Error: " + return_status))
+        if "error" in return_status:
+            raise Exception("error export file",
+                            ("ODBC Export Error: " + return_status))
 
     return return_status
 
