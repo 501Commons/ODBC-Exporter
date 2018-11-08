@@ -20,4 +20,4 @@ select
 from
     Waitlist
 where
-    Waitlist.intake_date >= '10/01/2017' and Waitlist.intake_date <= '10/30/2017'
+    Waitlist.intake_date >= '10/01/2017'
