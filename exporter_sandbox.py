@@ -7,7 +7,8 @@ def main():
 
     salesforce_type = str(sys.argv[1])
     client_type = str(sys.argv[2])
-    client_emaillist = str(sys.argv[3])
+    client_subtype = str(sys.argv[3])
+    client_emaillist = str(sys.argv[4])
 
     if len(sys.argv) < 4:
         print ("Calling error - missing inputs.  Expecting " +
@@ -42,14 +43,14 @@ def main():
 
     # Export Data
     print "\n\nODBC Exporter - Export Data Process\n\n"
-    status_export = process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state, emailattachments, emailonsuccess)
+    status_export = process_data(exporter_directory, salesforce_type, client_type, client_subtype, client_emaillist, sys_stdout_previous_state, emailattachments, emailonsuccess)
 
     print "ODBC Exporter process completed\n"
 
     if "Error" in status_export:
         sys.exit()
 
-def process_data(exporter_directory, salesforce_type, client_type, client_emaillist, sys_stdout_previous_state, emailattachments, emailonsuccess):
+def process_data(exporter_directory, salesforce_type, client_type, client_subtype, client_emaillist, sys_stdout_previous_state, emailattachments, emailonsuccess):
     """Process Data based on data_mode"""
 
     import sys
@@ -75,7 +76,8 @@ def process_data(exporter_directory, salesforce_type, client_type, client_emaill
     try:
         if not "Error" in subject:
             status_export = export_dataloader(exporter_directory,
-                                              client_type, salesforce_type)
+                                              client_type, client_subtype,
+                                              salesforce_type)
         else:
             status_export = "Error detected so skipped"
     except Exception as ex:
@@ -128,7 +130,7 @@ def contains_data(file_name):
 
     return False
 
-def export_dataloader(exporter_directory, client_type, salesforce_type):
+def export_dataloader(exporter_directory, client_type, client_subtype, salesforce_type):
     """Export out of ODBC using SQL Query files"""
 
     import csv
@@ -139,15 +141,13 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
     from os.path import exists
     from os.path import join
 
+    connectionType = client_subtype
     query_path = exporter_directory + "\\Queries"
     csv_path = exporter_directory + "\\Export\\"
     if not exists(csv_path):
         makedirs(csv_path)
 
     return_status = ""
-
-    with open(join(query_path, "..\\odbc_connect.dat"), 'r') as odbcconnectfile:
-        odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
 
     for file_name in listdir(query_path):
         if not (salesforce_type + ".sql") in file_name:
@@ -162,6 +162,13 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
         # Read SQL Query
         with open(join(query_path, file_name), 'r') as sqlqueryfile:
             sqlquery=sqlqueryfile.read().replace('\n', ' ')
+
+        # Get ODBC Connection
+        if not client_subtype in file_name:
+            continue
+
+        with open(join(query_path, "..\\odbc_connect_" + connectionType + ".dat"), 'r') as odbcconnectfile:
+            odbc_connect=odbcconnectfile.read().replace('\n', '').rstrip()
 
         # Query ODBC and write to CSV
         conn = pyodbc.connect(odbc_connect)
@@ -193,9 +200,9 @@ def export_dataloader(exporter_directory, client_type, salesforce_type):
 
                 writer.writerow(updated_row)
 
-        if "error" in return_status or not contains_data(csv_name):
-            raise Exception("error export file empty: " + csv_name, (
-                "ODBC Export Error: " + return_status))
+        if "error" in return_status:
+            raise Exception("error export file",
+                            ("ODBC Export Error: " + return_status))
 
     return return_status
 
