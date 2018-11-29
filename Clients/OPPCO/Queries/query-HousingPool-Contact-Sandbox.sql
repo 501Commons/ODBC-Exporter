@@ -1,10 +1,8 @@
 select
     Household.timestamp_created
     ,"key_foreign_waitlist_id"
-	, CONVERT(varchar(128), Client_Name_First)
-		COLLATE Cyrillic_General_CI_AI as Client_Name_First
-	, CONVERT(varchar(128), Client_Name_Last)
-		COLLATE Cyrillic_General_CI_AI as Client_Name_Last
+    ,"Client_Name_First"
+    ,"Client_Name_Last"
     ,"Client_DOB"
     ,"Client_Relationship_to_Household"
     ,"Client_Gender"
