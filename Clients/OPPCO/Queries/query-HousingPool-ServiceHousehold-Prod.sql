@@ -19,5 +19,3 @@ select
     ,gen_family_type
 from
     Waitlist
-where
-    Waitlist.intake_date >= '10/01/2017'

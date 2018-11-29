@@ -22,5 +22,3 @@ from
     Household
 INNER JOIN Waitlist
        ON Household.key_foreign_waitlist_id = Waitlist.key_primary_waitlist_id
-where
-        intake_date >= '10/01/2017'
