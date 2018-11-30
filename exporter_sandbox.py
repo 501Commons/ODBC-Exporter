@@ -216,7 +216,7 @@ def export_dataloader(exporter_directory, client_type, client_subtype, salesforc
 
                     updated_row.append(column)
 
-                writer.writerow(unicode(updated_row)
+                writer.writerow(updated_row)
 
         if "error" in return_status:
             raise Exception("error export file",
