@@ -134,6 +134,7 @@ def export_dataloader(exporter_directory, client_type, client_subtype, salesforc
     """Export out of ODBC using SQL Query files"""
 
     import csv
+    import unicodedata
     import pyodbc
     import os
     from os import listdir
@@ -187,9 +188,26 @@ def export_dataloader(exporter_directory, client_type, client_subtype, salesforc
                         # Check for newline in string
                         column = column.replace("\r", "")
 
-                        # Check to unify delimiters within columns for additional info (e.g., nickname, preferred name)
+                        # Left Double Quotation Mark and Right Double Quoation Mark
                         column = column.replace(u"\u201c", "(").replace(u"\u201d", ")")
+
+                        # Left Single Quotation Mark and Right Single Quotation Mark
                         column = column.replace(u"\u2018", "(").replace(u"\u2019", ")")
+
+                        # Quotation Mark
+                        column = column.replace(u"\u0022", "")
+
+                        # Apostrophe
+                        column = column.replace(u"\u0027", "")
+
+                        # Grave Accent
+                        column = column.replace(u"\u0060", "")
+
+                        # Acute Accent
+                        column = column.replace(u"\u00B4", "")
+
+                        # Normalize to Ascii
+                        column = unicodedata.normalize('NFKD', column).encode('ascii','ignore')
 
                     elif not column is None and isinstance(column, float):
 
