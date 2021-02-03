@@ -1,0 +1,7 @@
+select 
+    "name_last", "name_first", "name_mi"
+    ,"_kf_hh_data_id", "_kp_hh_member_data_id", "HH Member Sequence Number"
+    ,"Program", "ssn_conversion"
+    ,"dob", "age", "gender", "race", "ethnicity", "disabled", "veteran", "education", "insur_health"
+from
+    "Household Member Data"
