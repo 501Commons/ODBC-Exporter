@@ -28,7 +28,6 @@ SELECT
  	END AS EthnicityHispanicLatino    
 	, CONVERT(varchar(128), Person.Email1)
 		COLLATE Cyrillic_General_CI_AI as Email1
-	, RIGHT(vPerson.SSN, 4) as SSNShort
     , Person.MailAddress1, Person.MailAddress2, Person.MailCity, Person.MailState, Person.MailZip
     , Person.PhysicalAddress1, Person.PhysicalAddress2, Person.PhysicalCity, Person.PhysicalState, Person.PhysicalZip
     , PrimaryPhone.PhoneType, PrimaryPhone.PhoneNumber, PrimaryPhone.Extension, PrimaryPhone.FullDescription
