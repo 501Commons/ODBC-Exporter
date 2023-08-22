@@ -110,12 +110,6 @@ LEFT JOIN ProgramTerm
 	ON ProgramTerm.ProgramTermID = ProgramParticipation.ProgramTermID
 LEFT JOIN vCurrentStatusLoc
 	on vCurrentStatusLoc.PersonID = ProgramParticipation.PersonID AND vCurrentStatusLoc.ProgramTermID = ProgramParticipation.ProgramTermID AND vCurrentStatusLoc.ProgramID = ProgramTerm.ProgramID
-LEFT JOIN vFamilyPhone as PrimaryPhone
-	ON PrimaryPhone.FamilyID = vFamily.FamilyID AND
-		PrimaryPhone.PhoneRank <= 1
-LEFT JOIN vFamilyPhone as SecondaryPhone
-	ON SecondaryPhone.FamilyID = vFamily.FamilyID AND
-		SecondaryPhone.PhoneRank = 2
 WHERE YEAR(ProgramTerm.BeginDate) >= 2017 AND 
 	(vCurrentStatusLoc.StatusDescription = 'Enrolled' OR vCurrentStatusLoc.StatusDescription = 'Completed' OR vCurrentStatusLoc.StatusDescription = 'Dropped' or vCurrentStatusLoc.StatusDescription = 'Waitlisted')
 --	Uncomment Unit Test to verify joins should return 3 Services for Family
